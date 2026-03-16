@@ -1,0 +1,443 @@
+:root {
+    --bg-primary: #e8e4dc;
+    --bg-secondary: #d4cfc4;
+    --bg-card: #c8c4b8;
+    --bg-dark: #5a5852;
+    --text-primary: #3a3832;
+    --text-secondary: #6a6860;
+    --accent: #7a7870;
+    --border: #b0aca0;
+    --success: #6b8e6b;
+    --check-color: #5a5852;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+.header {
+    background-color: var(--bg-dark);
+    color: #e8e4dc;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-size: 24px;
+    letter-spacing: 3px;
+    margin-bottom: 5px;
+}
+
+.header p {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+/* Main Grid */
+.main-grid {
+    display: grid;
+    grid-template-columns: 220px 1fr 320px;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* Sidebar */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.calendar-settings, .add-habit {
+    background-color: var(--bg-card);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.calendar-settings h3 {
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--bg-dark);
+    padding-bottom: 5px;
+}
+
+.year-select, .month-select {
+    margin-bottom: 10px;
+}
+
+.year-select label, .month-select label {
+    display: block;
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--text-secondary);
+}
+
+select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--border);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.add-habit input, .add-habit select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    background-color: var(--bg-primary);
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.add-habit button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--bg-dark);
+    color: #e8e4dc;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: opacity 0.3s;
+}
+
+.add-habit button:hover {
+    opacity: 0.9;
+}
+
+/* Habits Section */
+.habits-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.chart-container {
+    background-color: var(--bg-card);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.chart-container h3 {
+    font-size: 14px;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+}
+
+.progress-bars, .weekly-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 100px;
+    padding: 10px 0;
+}
+
+.bar {
+    flex: 1;
+    background-color: var(--bg-dark);
+    min-height: 5px;
+    border-radius: 2px 2px 0 0;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.bar:hover {
+    opacity: 1;
+}
+
+.habits-grid {
+    background-color: var(--bg-card);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    overflow-x: auto;
+}
+
+.habits-grid h3 {
+    font-size: 16px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--bg-dark);
+}
+
+.habits-header {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    font-weight: bold;
+    font-size: 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.habit-name-col {
+    width: 150px;
+    flex-shrink: 0;
+}
+
+.days-header {
+    display: flex;
+    gap: 4px;
+}
+
+.day-label {
+    width: 28px;
+    text-align: center;
+    font-size: 10px;
+    color: var(--text-secondary);
+}
+
+.habit-row {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.habit-info {
+    width: 150px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.habit-icon {
+    font-size: 16px;
+}
+
+.habit-days {
+    display: flex;
+    gap: 4px;
+}
+
+.day-checkbox {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background-color: var(--bg-primary);
+    border-radius: 3px;
+    transition: all 0.2s;
+}
+
+.day-checkbox:hover {
+    background-color: var(--bg-secondary);
+}
+
+.day-checkbox.checked {
+    background-color: var(--check-color);
+    color: white;
+}
+
+/* Right Sidebar */
+.right-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.stats-card, .analysis-card, .top-habits {
+    background-color: var(--bg-card);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.stats-card h3, .analysis-card h3, .top-habits h3 {
+    font-size: 14px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--bg-dark);
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+}
+
+.donut-chart {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.donut {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: conic-gradient(
+        var(--bg-dark) calc(var(--progress) * 3.6deg),
+        var(--bg-secondary) 0deg
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.donut::before {
+    content: '';
+    width: 70px;
+    height: 70px;
+    background-color: var(--bg-card);
+    border-radius: 50%;
+    position: absolute;
+}
+
+.donut span {
+    position: relative;
+    font-weight: bold;
+    font-size: 18px;
+    color: var(--text-primary);
+}
+
+.analysis-table {
+    width: 100%;
+    font-size: 11px;
+    border-collapse: collapse;
+}
+
+.analysis-table th, .analysis-table td {
+    padding: 6px 4px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.analysis-table th {
+    background-color: var(--bg-secondary);
+    font-weight: bold;
+}
+
+.progress-cell {
+    background-color: var(--bg-secondary);
+    height: 20px;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--bg-dark);
+    transition: width 0.3s;
+}
+
+.top-habits ol {
+    padding-left: 20px;
+    font-size: 12px;
+}
+
+.top-habits li {
+    padding: 5px 0;
+    border-bottom: 1px dotted var(--border);
+}
+
+/* Bottom Section */
+.bottom-section {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 20px;
+    background-color: var(--bg-card);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.mood-tracker h3 {
+    font-size: 14px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--bg-dark);
+}
+
+.mood-scale {
+    margin-bottom: 20px;
+}
+
+.mood-scale span {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.mood-bars {
+    display: flex;
+    gap: 4px;
+    align-items: flex-end;
+    height: 60px;
+}
+
+.mood-bar {
+    flex: 1;
+    background-color: var(--bg-dark);
+    border-radius: 2px;
+    opacity: 0.7;
+}
+
+.trend-chart {
+    position: relative;
+    height: 150px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 4px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .sidebar, .right-sidebar {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .bottom-section {
+        grid-template-columns: 1fr;
+    }
+}

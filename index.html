@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habit Tracker - January</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-section">
+                <h1>HABIT TRACKER</h1>
+                <p>- January -</p>
+            </div>
+        </header>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Left Sidebar -->
+            <aside class="sidebar">
+                <div class="calendar-settings">
+                    <h3>CALENDAR SETTINGS</h3>
+                    <div class="year-select">
+                        <label>YEARS</label>
+                        <select id="yearSelect">
+                            <option>2026</option>
+                            <option>2025</option>
+                        </select>
+                    </div>
+                    <div class="month-select">
+                        <label>Month</label>
+                        <select id="monthSelect">
+                            <option>January</option>
+                            <option>February</option>
+                            <option>March</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Add Habit -->
+                <div class="add-habit">
+                    <input type="text" id="newHabit" placeholder="New habit name...">
+                    <select id="habitIcon">
+                        <option value="⏰">⏰ Wake up</option>
+                        <option value="🧘">🧘 Meditation</option>
+                        <option value="💪">💪 Gym</option>
+                        <option value="🚿">🚿 Cold Shower</option>
+                        <option value="💼">💼 Work</option>
+                        <option value="📖">📖 Read</option>
+                        <option value="🎯">🎯 Learn</option>
+                        <option value="🍬">🍬 No sugar</option>
+                        <option value="🍺">🍺 No alcohol</option>
+                        <option value="📱">📱 No social media</option>
+                        <option value="📝">📝 Planning</option>
+                        <option value="😴">😴 Sleep early</option>
+                    </select>
+                    <button onclick="addHabit()">+ Add Habit</button>
+                </div>
+            </aside>
+
+            <!-- Center - Habits Grid -->
+            <section class="habits-section">
+                <!-- Daily Progress Chart -->
+                <div class="chart-container">
+                    <h3>📊 Daily Progress</h3>
+                    <div class="progress-bars" id="dailyProgress">
+                        <!-- JS se generate hoga -->
+                    </div>
+                </div>
+
+                <!-- Weekly Progress Chart -->
+                <div class="chart-container">
+                    <h3>📈 Weekly Progress</h3>
+                    <div class="weekly-bars" id="weeklyProgress">
+                        <!-- JS se generate hoga -->
+                    </div>
+                </div>
+
+                <!-- Habits Grid -->
+                <div class="habits-grid">
+                    <h3>My Habits</h3>
+                    <div class="habits-header">
+                        <span class="habit-name-col">Habit</span>
+                        <div class="days-header" id="daysHeader">
+                            <!-- 31 days -->
+                        </div>
+                    </div>
+                    <div id="habitsList">
+                        <!-- Habits yahan ayenge -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Sidebar -->
+            <aside class="right-sidebar">
+                <!-- Overall Stats -->
+                <div class="stats-card">
+                    <h3>Overall Stats</h3>
+                    <div class="stat-item">
+                        <span>Goal</span>
+                        <strong id="totalGoal">372</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Completed</span>
+                        <strong id="totalCompleted">298</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Left</span>
+                        <strong id="totalLeft">74</strong>
+                    </div>
+                    <div class="donut-chart">
+                        <div class="donut" style="--progress: 80;">
+                            <span>80%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analysis -->
+                <div class="analysis-card">
+                    <h3>Analysis</h3>
+                    <table class="analysis-table">
+                        <thead>
+                            <tr>
+                                <th>Goal</th>
+                                <th>Actual</th>
+                                <th>Left</th>
+                                <th>Progress</th>
+                                <th>%</th>
+                            </tr>
+                        </thead>
+                        <tbody id="analysisBody">
+                            <!-- JS se generate -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Top Habits -->
+                <div class="top-habits">
+                    <h3>TOP 10 DAILY HABIT</h3>
+                    <ol id="topHabitsList">
+                        <!-- JS se generate -->
+                    </ol>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Bottom Section -->
+        <section class="bottom-section">
+            <div class="mood-tracker">
+                <h3>Mental State</h3>
+                <div class="mood-scale">
+                    <span>Mood</span>
+                    <div class="mood-bars" id="moodBars"></div>
+                </div>
+                <div class="mood-scale">
+                    <span>Motivation</span>
+                    <div class="mood-bars" id="motivationBars"></div>
+                </div>
+            </div>
+            <div class="trend-chart">
+                <canvas id="trendCanvas"></canvas>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

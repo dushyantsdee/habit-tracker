@@ -14,8 +14,7 @@ let habits = JSON.parse(localStorage.getItem('habits')) || [
     { id: 12, name: 'Sleep before 11:00', icon: '😴', completed: Array(31).fill(false) }
 ];
 
-let moodData = Array(31).fill(0).map(() => Math.floor(Math.random() * 5) + 5);
-let motivationData = Array(31).fill(0).map(() => Math.floor(Math.random() * 5) + 4);
+let editingId = null;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
@@ -33,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Render Days Header
 function renderDaysHeader() {
     const header = document.getElementById('daysHeader');
-    const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+    header.innerHTML = '';
     
     for (let i = 1; i <= 31; i++) {
         const dayLabel = document.createElement('div');
@@ -43,7 +42,7 @@ function renderDaysHeader() {
     }
 }
 
-// Render Habits
+// Render Habits with Edit & Delete
 function renderHabits() {
     const container = document.getElementById('habitsList');
     container.innerHTML = '';
@@ -52,10 +51,19 @@ function renderHabits() {
         const row = document.createElement('div');
         row.className = 'habit-row';
         
+        // Habit Info with Action Buttons
         const info = document.createElement('div');
         info.className = 'habit-info';
-        info.innerHTML = `<span class="habit-icon">${habit.icon}</span> <span>${habit.name}</span>`;
+        info.innerHTML = `
+            <span class="habit-icon">${habit.icon}</span>
+            <span class="habit-name">${habit.name}</span>
+            <div class="habit-actions">
+                <button class="btn-edit" onclick="startEdit(${habit.id})" title="Edit">✏️</button>
+                <button class="btn-delete" onclick="deleteHabit(${habit.id})" title="Delete">🗑️</button>
+            </div>
+        `;
         
+        // Days Checkboxes
         const daysContainer = document.createElement('div');
         daysContainer.className = 'habit-days';
         
@@ -87,25 +95,115 @@ function toggleHabit(habitId, day) {
     }
 }
 
+// Start Edit Habit
+function startEdit(habitId) {
+    const habit = habits.find(h => h.id === habitId);
+    if (!habit) return;
+    
+    editingId = habitId;
+    
+    // Fill form with existing data
+    document.getElementById('newHabit').value = habit.name;
+    document.getElementById('habitIcon').value = habit.icon;
+    
+    // Change button to "Update"
+    const btn = document.querySelector('.add-habit button');
+    btn.textContent = '💾 Update Habit';
+    btn.onclick = updateHabit;
+    
+    // Add cancel button
+    if (!document.getElementById('cancelBtn')) {
+        const cancelBtn = document.createElement('button');
+        cancelBtn.id = 'cancelBtn';
+        cancelBtn.textContent = '❌ Cancel';
+        cancelBtn.onclick = cancelEdit;
+        cancelBtn.style.backgroundColor = '#999';
+        document.querySelector('.add-habit').appendChild(cancelBtn);
+    }
+    
+    // Scroll to form
+    document.querySelector('.add-habit').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Update Habit
+function updateHabit() {
+    const input = document.getElementById('newHabit');
+    const iconSelect = document.getElementById('habitIcon');
+    const name = input.value.trim();
+    const icon = iconSelect.value.split(' ')[0];
+    
+    if (!name) {
+        alert('Please enter habit name!');
+        return;
+    }
+    
+    const habit = habits.find(h => h.id === editingId);
+    if (habit) {
+        habit.name = name;
+        habit.icon = icon;
+        saveData();
+        renderHabits();
+        updateStats();
+        renderAnalysis();
+        renderTopHabits();
+        cancelEdit();
+    }
+}
+
+// Cancel Edit
+function cancelEdit() {
+    editingId = null;
+    document.getElementById('newHabit').value = '';
+    document.getElementById('habitIcon').selectedIndex = 0;
+    
+    const btn = document.querySelector('.add-habit button');
+    btn.textContent = '+ Add Habit';
+    btn.onclick = addHabit;
+    
+    const cancelBtn = document.getElementById('cancelBtn');
+    if (cancelBtn) cancelBtn.remove();
+}
+
+// Delete Habit
+function deleteHabit(habitId) {
+    const habit = habits.find(h => h.id === habitId);
+    if (!habit) return;
+    
+    // Confirm before delete
+    if (confirm(`Delete "${habit.name}"?`)) {
+        habits = habits.filter(h => h.id !== habitId);
+        saveData();
+        renderHabits();
+        updateStats();
+        renderAnalysis();
+        renderTopHabits();
+        renderDailyProgress();
+    }
+}
+
 // Add New Habit
 function addHabit() {
     const input = document.getElementById('newHabit');
     const iconSelect = document.getElementById('habitIcon');
     const name = input.value.trim();
     
-    if (name) {
-        const newHabit = {
-            id: Date.now(),
-            name: name,
-            icon: iconSelect.value.split(' ')[0],
-            completed: Array(31).fill(false)
-        };
-        habits.push(newHabit);
-        saveData();
-        renderHabits();
-        updateStats();
-        input.value = '';
+    if (!name) {
+        alert('Please enter habit name!');
+        return;
     }
+    
+    const newHabit = {
+        id: Date.now(),
+        name: name,
+        icon: iconSelect.value.split(' ')[0],
+        completed: Array(31).fill(false)
+    };
+    
+    habits.push(newHabit);
+    saveData();
+    renderHabits();
+    updateStats();
+    input.value = '';
 }
 
 // Render Daily Progress
@@ -115,7 +213,7 @@ function renderDailyProgress() {
     
     for (let day = 0; day < 31; day++) {
         const completed = habits.filter(h => h.completed[day]).length;
-        const percentage = (completed / habits.length) * 100;
+        const percentage = habits.length > 0 ? (completed / habits.length) * 100 : 0;
         
         const bar = document.createElement('div');
         bar.className = 'bar';
@@ -141,7 +239,7 @@ function renderWeeklyProgress() {
             });
         }
         
-        const percentage = (weekCompleted / weekTotal) * 100;
+        const percentage = weekTotal > 0 ? (weekCompleted / weekTotal) * 100 : 0;
         const bar = document.createElement('div');
         bar.className = 'bar';
         bar.style.height = `${percentage}%`;
@@ -161,15 +259,17 @@ function updateStats() {
     });
     
     const totalLeft = totalPossible - totalCompleted;
-    const percentage = Math.round((totalCompleted / totalPossible) * 100);
+    const percentage = totalPossible > 0 ? Math.round((totalCompleted / totalPossible) * 100) : 0;
     
     document.getElementById('totalGoal').textContent = totalPossible;
     document.getElementById('totalCompleted').textContent = totalCompleted;
     document.getElementById('totalLeft').textContent = totalLeft;
     
     const donut = document.querySelector('.donut');
-    donut.style.setProperty('--progress', percentage);
-    donut.querySelector('span').textContent = `${percentage}%`;
+    if (donut) {
+        donut.style.setProperty('--progress', percentage);
+        donut.querySelector('span').textContent = `${percentage}%`;
+    }
 }
 
 // Render Analysis
@@ -220,8 +320,13 @@ function renderMoodBars() {
     const moodContainer = document.getElementById('moodBars');
     const motivationContainer = document.getElementById('motivationBars');
     
+    if (!moodContainer || !motivationContainer) return;
+    
     moodContainer.innerHTML = '';
     motivationContainer.innerHTML = '';
+    
+    const moodData = Array(31).fill(0).map(() => Math.floor(Math.random() * 5) + 5);
+    const motivationData = Array(31).fill(0).map(() => Math.floor(Math.random() * 5) + 4);
     
     moodData.forEach(val => {
         const bar = document.createElement('div');
@@ -238,30 +343,29 @@ function renderMoodBars() {
     });
 }
 
-// Render Trend Chart (Simple Canvas)
+// Render Trend Chart
 function renderTrendChart() {
     const canvas = document.getElementById('trendCanvas');
-    const ctx = canvas.getContext('2d');
+    if (!canvas) return;
     
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth || 600;
+    canvas.height = canvas.offsetHeight || 150;
     
     const width = canvas.width;
     const height = canvas.height;
     
-    // Clear
     ctx.clearRect(0, 0, width, height);
-    
-    // Draw trend line
-    ctx.beginPath();
-    ctx.strokeStyle = '#5a5852';
-    ctx.lineWidth = 2;
     
     const data = [];
     for (let i = 0; i < 31; i++) {
         const completed = habits.filter(h => h.completed[i]).length;
-        data.push((completed / habits.length) * height);
+        data.push(habits.length > 0 ? (completed / habits.length) * height : 0);
     }
+    
+    ctx.beginPath();
+    ctx.strokeStyle = '#5a5852';
+    ctx.lineWidth = 2;
     
     data.forEach((val, idx) => {
         const x = (idx / 30) * width;
@@ -272,7 +376,6 @@ function renderTrendChart() {
     
     ctx.stroke();
     
-    // Fill area
     ctx.lineTo(width, height);
     ctx.lineTo(0, height);
     ctx.closePath();
